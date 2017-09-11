@@ -1,4 +1,10 @@
 #!/bin/bash
+
+MECAB_URL="https://drive.google.com/uc?export=download&id=0B4y35FiV1wh7cENtOXlicTFaRUE"
+JUMAN_URL="http://nlp.ist.i.kyoto-u.ac.jp/DLcounter/lime.cgi?down=http://nlp.ist.i.kyoto-u.ac.jp/nl-resource/juman/juman-7.01.tar.bz2&name=juman-7.01.tar.bz2"
+JUMANPP_URL="http://lotus.kuee.kyoto-u.ac.jp/nl-resource/jumanpp/jumanpp-1.02.tar.xz"
+KYTEA_URL="http://www.phontron.com/kytea/download/kytea-0.4.7.tar.gz -O kytea-0.4.7.tar.gz"
+
 os_type=`uname`
 echo "os-type is "$os_type
 if [ `uname` = "Darwin" ]; then
@@ -23,7 +29,7 @@ is_mecab_install=$?
 
 if [ $is_mecab_install -eq 127 ]; then
     ## mecab
-    wget -O mecab-0.996.tar.gz "https://drive.google.com/uc?export=download&id=0B4y35FiV1wh7cENtOXlicTFaRUE"
+    wget -O mecab-0.996.tar.gz ${MECAB_URL}
     tar zxvf mecab-0.996.tar.gz
     cd mecab-0.996 && ./configure && make && make install
     cd $WORK_DIR
@@ -46,7 +52,7 @@ is_juman_install=$?
 
 if [ $is_juman_install -eq 127 ]; then
     ## juman
-    wget -O juman7.0.1.tar.bz2 "http://nlp.ist.i.kyoto-u.ac.jp/DLcounter/lime.cgi?down=http://nlp.ist.i.kyoto-u.ac.jp/nl-resource/juman/juman-7.01.tar.bz2&name=juman-7.01.tar.bz2"
+    wget -O juman7.0.1.tar.bz2 ${JUMAN_URL}
     bzip2 -dc juman7.0.1.tar.bz2  | tar xvf -
     cd juman-7.01 && ./configure && make && make install
 
@@ -63,9 +69,10 @@ is_jumanpp_install=$?
 
 if [ $is_jumanpp_install -eq 127 ]; then
     # jumanpp
-    wget http://lotus.kuee.kyoto-u.ac.jp/nl-resource/jumanpp/jumanpp-1.01.tar.xz
-    tar xJvf jumanpp-1.01.tar.xz
-    cd jumanpp-1.01/ && ./configure && make && make install
+    wget -O jumanpp.tar.xz ${JUMANPP_URL}
+    tar xJvf jumanpp.tar.xz
+    mv jumanpp-* jumanpp-source
+    cd jumanpp-source/ && ./configure && make && make install
     # todo jumanppのサーバー起動スクリプト実施
 
     # インストール後のldconfig
@@ -82,7 +89,7 @@ is_kytea_install=$?
 
 if [ $is_kytea_install -eq 127 ]; then
     # kytea
-    wget http://www.phontron.com/kytea/download/kytea-0.4.7.tar.gz -O kytea-0.4.7.tar.gz
+    wget ${KYTEA_URL}
     tar -xvf kytea-0.4.7.tar.gz
     cd kytea-0.4.7 && ./configure && make && make install
     # インストール後のldconfig
@@ -116,9 +123,9 @@ else
 fi
 
 
-if [ -f ./jumanpp-1.01.tar.xz ]; then
+if [ -f ./jumanpp.tar.xz ]; then
 	# jumanpp
-	rm jumanpp-1.01.tar.xz
+	rm jumanpp.tar.xz
 else
     :
 fi
@@ -152,8 +159,8 @@ else
     :
 fi
 
-if [ -d ./jumanpp-1.01 ]; then
-	rm -rf jumanpp-1.01
+if [ -d ./jumanpp-source ]; then
+	rm -rf jumanpp-source
 else
     :
 fi
