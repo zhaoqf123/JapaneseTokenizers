@@ -179,7 +179,8 @@ class MecabWrapper(WrapperBase):
         pos1 = list_feature_items[0]
         pos2 = list_feature_items[1]
         pos3 = list_feature_items[2]
-        tuple_pos = ( pos1, pos2, pos3 )
+        pos4 = list_feature_items[3]
+        tuple_pos = ( pos1, pos2, pos3, pos4 )
 
         # if without constraint(output is normal mecab dictionary like)
         if len(list_feature_items) == 9:
